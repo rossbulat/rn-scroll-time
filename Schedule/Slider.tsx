@@ -84,13 +84,13 @@ export const Slider = (props: any) => {
       <Text style={{ fontWeight: 'bold', color: 'green' }}>
         {sliderTime}
       </Text>
-      <View style={{ marginHorizontal: 20 }}>
+      <View style={styles.padding}>
         <View
-          style={styles.scrollViewContainer}
+          style={styles.container}
           onLayout={event => setScrollerContainerWidth(event.nativeEvent.layout.width)}
         >
           <View style={{
-            ...styles.scrollViewMiddle,
+            ...styles.middle,
             borderLeftColor: 'green',
           }}></View>
           <ScrollView
