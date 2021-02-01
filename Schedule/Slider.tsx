@@ -17,6 +17,7 @@ export const Slider = (props: any) => {
   const [scrollerContainerWidth, setScrollerContainerWidth] = useState(0);
   const [scrollerTime, setScrollerTime]: any = useState(schedule.scheduleTimeLocal);
 
+  // initial ScrollView resizes as the component mounts
   useEffect(() => {
     if (schedule !== undefined && scrollerContainerWidth !== 0) {
       const percentIn = schedule.scheduleTimeLocal / (86400 * 0.01);
@@ -25,14 +26,13 @@ export const Slider = (props: any) => {
     }
   }, [scrollerContainerWidth]);
 
+  // update the scroller position in conjunction with width resizes
   useEffect(() => {
     const animated = !(scrollerPos === 0);
     if (scrollRef.current !== null) {
       scrollRef.current.scrollTo({ x: scrollerPos, animated: animated });
     }
-
   }, [scrollerPos])
-
 
   const handleScrollChange = (val) => {
     const maxScroll = SCROLLER_WIDTH;
@@ -51,7 +51,6 @@ export const Slider = (props: any) => {
     }
     setScrollerTime(newTime);
   }
-
 
   let tickerWidth = ((SCROLLER_WIDTH) - scrollerContainerWidth) / (TOTAL_INDEXES - 1);
   let indexesEls = [];
@@ -89,10 +88,7 @@ export const Slider = (props: any) => {
           style={styles.container}
           onLayout={event => setScrollerContainerWidth(event.nativeEvent.layout.width)}
         >
-          <View style={{
-            ...styles.middle,
-            borderLeftColor: 'green',
-          }}></View>
+          <View style={{ ...styles.middle, borderLeftColor: 'green' }}></View>
           <ScrollView
             ref={scrollRef}
             horizontal={true}
