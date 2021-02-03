@@ -34,6 +34,7 @@ export const Slider = (props: any) => {
     }
   }, [scrollerPos])
 
+
   const handleScrollChange = (val) => {
     const maxScroll = SCROLLER_WIDTH;
     const currentScroll = val.nativeEvent.contentOffset.x >= maxScroll
@@ -52,64 +53,58 @@ export const Slider = (props: any) => {
     setScrollerTime(newTime);
   }
 
-  let tickerWidth = ((SCROLLER_WIDTH) - scrollerContainerWidth) / (TOTAL_INDEXES - 1);
-  let indexesEls = [];
+
+  const indicatorWidth = ((SCROLLER_WIDTH) - scrollerContainerWidth) / (TOTAL_INDEXES - 1);
+  let indicators = [];
   for (let i = 0; i < TOTAL_INDEXES; i++) {
 
-    // check if current interval is an hour
+    // check if current indicator is on the hour
     let hourInterval = (i % 20 === 0 || i === TOTAL_INDEXES - 1);
 
-    // make hour interval taller than minute intervals
-    let height = hourInterval ? '80%' : '25%';
-
-    indexesEls.push(
+    indicators.push(
       <View
         key={i}
         style={{
-          width: tickerWidth,
-          height: height,
-          borderRightColor: 'green',
-          borderRightWidth: 1
+          ...styles.indicator,
+          width: indicatorWidth,
+          height: hourInterval ? '80%' : '25%',
         }}>
       </View>
     );
   }
 
-  // format the scroller time to HH:SS A
-  const sliderTime = moment().startOf('day').add(scrollerTime, 'seconds').format('h:mm A');
-
   return (
     <>
-      <Text style={{ fontWeight: 'bold', color: 'green' }}>
-        {sliderTime}
-      </Text>
-      <View style={styles.padding}>
-        <View
-          style={styles.container}
-          onLayout={event => setScrollerContainerWidth(event.nativeEvent.layout.width)}
+      <View style={styles.time}>
+        <Text style={styles.text}>
+          {moment().startOf('day').add(scrollerTime, 'seconds').format('h:mm A')}
+        </Text>
+      </View>
+      <View
+        style={styles.container}
+        onLayout={event => setScrollerContainerWidth(event.nativeEvent.layout.width)}
+      >
+        <View style={styles.selector}></View>
+        <ScrollView
+          ref={scrollRef}
+          horizontal={true}
+          contentContainerStyle={{ ...styles.scrollview, width: SCROLLER_WIDTH, }}
+          showsHorizontalScrollIndicator={false}
+          onScroll={data => handleScrollChange(data)}
+          decelerationRate='fast'
+          scrollEventThrottle={100}
+          onScrollEndDrag={() => {
+            handleScheduleTime(scrollerTime);
+          }}
+          onMomentumScrollEnd={() => {
+            handleScheduleTime(scrollerTime);
+          }}
+          contentOffset={{ x: scrollerPos, y: 0 }}
         >
-          <View style={{ ...styles.middle, borderLeftColor: 'green' }}></View>
-          <ScrollView
-            ref={scrollRef}
-            horizontal={true}
-            contentContainerStyle={{ ...styles.scrollview, width: SCROLLER_WIDTH, }}
-            showsHorizontalScrollIndicator={false}
-            onScroll={data => handleScrollChange(data)}
-            decelerationRate='fast'
-            scrollEventThrottle={100}
-            onScrollEndDrag={() => {
-              handleScheduleTime(scrollerTime);
-            }}
-            onMomentumScrollEnd={() => {
-              handleScheduleTime(scrollerTime);
-            }}
-            contentOffset={{ x: scrollerPos, y: 0 }}
-          >
-            <View style={{ width: (scrollerContainerWidth * 0.5) - (tickerWidth - 1) }}></View>
-            {indexesEls}
-            <View style={{ width: (scrollerContainerWidth * 0.5) }}></View>
-          </ScrollView>
-        </View>
+          <View style={{ width: (scrollerContainerWidth * 0.5) - (indicatorWidth - 1) }}></View>
+          {indicators}
+          <View style={{ width: (scrollerContainerWidth * 0.5) }}></View>
+        </ScrollView>
       </View>
     </>
   )

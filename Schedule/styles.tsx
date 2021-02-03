@@ -1,20 +1,29 @@
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
-  padding: {
-    marginHorizontal: 20
-  },
   container: {
     width: '100%',
     marginTop: 20,
   },
-  middle: {
+  time: {
+    marginVertical: 10,
+  },
+  text: {
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  selector: {
     position: 'absolute',
-    top: '0%',
+    bottom: '-20%',
     left: '50%',
-    height: '120%',
+    height: '130%',
     borderLeftWidth: 2,
     zIndex: 1,
+    borderLeftColor: 'black'
+  },
+  indicator: {
+    borderRightColor: 'grey',
+    borderRightWidth: 1
   },
   scrollview: {
     height: 50,
