@@ -14,7 +14,7 @@ export default function App () {
           schedule={{
             "enabled": true,
             "scheduleTimeUtc": 61200,
-            "scheduleTimeLocal": 0,
+            "scheduleTimeLocal": 61200,
           }}
           handleScheduleTime={() => {
             console.log('handle updated time...');
